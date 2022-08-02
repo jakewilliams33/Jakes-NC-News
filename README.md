@@ -9,7 +9,7 @@ and another named '.env.test' with the text 'PGDATABASE=nc_news_test' inside.
 
 -Double check that these .env files are .gitignored.
 
--Run 'npm install' to install all necessary packages.
+-Run 'npm install' and 'npm install express' to install all necessary packages.
 
 -You have also been provided with a db folder with some data, a setup.sql file and a seeds folder. You should also take a minute to familiarise yourself with the npm scripts you have been provided.
 
