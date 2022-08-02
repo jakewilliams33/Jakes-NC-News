@@ -83,7 +83,6 @@ test("status:400, responds with an error message when passed a bad ID", () => {
      .get("/api/articles/11111111")
      .expect(404)
      .then((res) => {
-      console.log(Object.keys(res))
        expect(res.body.msg).toBe("No article found by that ID");
      });
  });
