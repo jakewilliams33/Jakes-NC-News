@@ -68,7 +68,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-describe("GET /api/articles/invalid ID", () => {
+describe("GET Error Handling", () => {
   test("status:400, responds with an error message when passed a bad ID", () => {
     return request(app)
       .get("/api/articles/abcd")
@@ -85,6 +85,16 @@ describe("GET /api/articles/invalid ID", () => {
         expect(res.body.msg).toBe("No article found by that ID");
       });
   });
+    it("status:400, responds with an error message when not passed an integer", () => {
+      const articleUpdate = { inc_votes: "hello" };
+      return request(app)
+        .patch("/api/articles/1")
+        .send(articleUpdate)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Invalid input");
+        });
+    });
 });
 
 describe("PATCH /api/articles/:article_id", () => {
@@ -125,14 +135,26 @@ describe("PATCH /api/articles/:article_id", () => {
         });
       });
   });
-  it("status:400, responds with an error message when not passed an integer", () => {
-    const articleUpdate = { inc_votes: "hello" };
+
+});
+
+describe("GET /api/users", () => {
+  test("Responds with an array of users objects, each of which should have 'username', 'name' and 'avatar_url' properties", () => {
     return request(app)
-      .patch("/api/articles/1")
-      .send(articleUpdate)
-      .expect(400)
+      .get("/api/users")
+      .expect(200)
       .then((res) => {
-        expect(res.body.msg).toBe("Invalid input");
+        expect(Array.isArray(res.body.users)).toBe(true);
+        expect(res.body.users.length > 1).toBe(true);
+        res.body.users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
       });
   });
 });
