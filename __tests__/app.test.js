@@ -159,3 +159,14 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("GET /api/articles", () => {
+    test("status:200, returns an array of article objects sorted descending by date", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+})
