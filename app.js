@@ -9,9 +9,12 @@ const {
   patchArticleById,
 } = require("./controllers/articles.controller");
 
+const { getUsers } = require("./controllers/users.controller");
+
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById);
 app.patch("/api/articles/:article_id", patchArticleById);
+app.get("/api/users", getUsers);
 
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
@@ -22,9 +25,9 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    if (err.status && err.msg) {
-        res.status(err.status).send({msg: err.msg})
-    }
+  if (err.status && err.msg) {
+    res.status(err.status).send({ msg: err.msg });
+  }
 });
 
 app.all("/*", (req, res) => {
