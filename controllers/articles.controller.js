@@ -1,7 +1,7 @@
 const {
   selectArticleById,
   updateArticleById,
-  selectArticles
+  selectArticles,
 } = require("../models/articles.model");
 
 exports.getArticleById = (req, res, next) => {
