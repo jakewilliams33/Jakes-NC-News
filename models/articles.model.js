@@ -47,7 +47,6 @@ exports.selectCommentsByArticleId = (id) => {
           msg: "No comments found with that article ID",
         });
       }
-      console.log(rows)
       return rows;
     });
 };
