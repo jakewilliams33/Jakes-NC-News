@@ -97,24 +97,54 @@ describe("Error Handling", () => {
         expect(res.body.msg).toBe("Invalid input");
       });
   });
-    test("status:400, responds with an error message when passed a bad ID", () => {
+  test("status:400, responds with an error message when passed a bad ID", () => {
+    return request(app)
+      .get("/api/articles/abcd/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("status:404, responds with an error message when article does not exist", () => {
+    return request(app)
+      .get("/api/articles/1234/comments")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("No article found by that ID");
+      });
+  });
+
+    test("status:404, responds with an error message when article does not exist", () => {
+      const newComment = {
+        username: "icellusedkars",
+        body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
+      };
       return request(app)
-        .get("/api/articles/abcd/comments")
+        .post("/api/articles/1234/comments")
+        .send(newComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("No article found by that ID");
+        });
+    });
+
+    test("status:400, responds with an error message when passed an object with invalid inputs", () => {
+      const newComment = {
+        username: 4567,
+        body: null,
+      };
+      return request(app)
+        .post("/api/articles/1/comments")
         .expect(400)
         .then((res) => {
           expect(res.body.msg).toBe("Invalid input");
         });
     });
 
-        test("status:404, responds with an error message when passed a bad ID", () => {
-          return request(app)
-            .get("/api/articles/1234/comments")
-            .expect(404)
-            .then((res) => {
-              expect(res.body.msg).toBe("No article found by that ID");
-            });
-        });
 });
+
+
 
 describe("PATCH /api/articles/:article_id", () => {
   it("status:200, responds with the updated article object with new votes added to the previous votes value", () => {
@@ -211,23 +241,48 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then((res) => {
         expect(res.body.comments).toEqual([
-      {
-        comment_id: 1,
-        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-        article_id: 9,
-        author: 'butter_bridge',
-        votes: 16,
-        created_at: '2020-04-06T12:17:00.000Z'
-      },
-      {
-        comment_id: 17,
-        body: 'The owls are not what they seem.',
-        article_id: 9,
-        author: 'icellusedkars',
-        votes: 20,
-        created_at: '2020-03-14T17:02:00.000Z'
-      }
-    ]);
+          {
+            comment_id: 1,
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            article_id: 9,
+            author: "butter_bridge",
+            votes: 16,
+            created_at: "2020-04-06T12:17:00.000Z",
+          },
+          {
+            comment_id: 17,
+            body: "The owls are not what they seem.",
+            article_id: 9,
+            author: "icellusedkars",
+            votes: 20,
+            created_at: "2020-03-14T17:02:00.000Z",
+          },
+        ]);
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("status:201, responds with comment newly added to the database", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toEqual({
+          article_id: 1,
+          author: "icellusedkars",
+          body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
+          comment_id: expect.any(Number),
+          created_at: expect.any(String),
+          votes: 0,
+        });
+      });
+  });
+});
+
+

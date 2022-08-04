@@ -71,3 +71,34 @@ exports.selectCommentsByArticleId = (id) => {
         });
     });
 };
+
+exports.insertCommentById = (id, newComment) => {
+  const { username, body } = newComment;
+  return db
+    .query(
+      `SELECT * FROM articles
+          WHERE article_id = $1;`,
+      [id]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No article found by that ID",
+        });
+      } else if (typeof username !== "string" || typeof body !== "string") {
+        return Promise.reject({
+          status: 400,
+          msg: "Invalid input",
+        });
+      }
+      return db
+        .query(
+          "INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;",
+          [username, body, id]
+        )
+        .then(({ rows }) => {
+          return rows[0];
+        });
+    });
+};
