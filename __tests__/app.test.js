@@ -42,15 +42,7 @@ describe("ALL /api/*", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test(`responds with an article object, which should have the following properties: 
-  'author' which is the 'username' from the users table
-   title
-   article_id
-   body
-   topic
-   created_at
-   votes
-`, () => {
+  test(`responds with an article object`, () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -68,9 +60,7 @@ describe("GET /api/articles/:article_id", () => {
         );
       });
   });
-});
 
-describe("Error Handling", () => {
   test("status:400, responds with an error message when passed a bad ID", () => {
     return request(app)
       .get("/api/articles/abcd")
@@ -79,6 +69,7 @@ describe("Error Handling", () => {
         expect(res.body.msg).toBe("Invalid input");
       });
   });
+
   test("status:404, responds with an error message when passed an id that doesn't belong to an article", () => {
     return request(app)
       .get("/api/articles/11111111")
@@ -87,64 +78,80 @@ describe("Error Handling", () => {
         expect(res.body.msg).toBe("No article found by that ID");
       });
   });
-  it("status:400, responds with an error message when not passed an integer", () => {
-    const articleUpdate = { inc_votes: "hello" };
-    return request(app)
-      .patch("/api/articles/1")
-      .send(articleUpdate)
-      .expect(400)
-      .then((res) => {
-        expect(res.body.msg).toBe("Invalid input");
-      });
-  });
-  test("status:400, responds with an error message when passed a bad ID", () => {
-    return request(app)
-      .get("/api/articles/abcd/comments")
-      .expect(400)
-      .then((res) => {
-        expect(res.body.msg).toBe("Invalid input");
-      });
-  });
-
-  test("status:404, responds with an error message when article does not exist", () => {
-    return request(app)
-      .get("/api/articles/1234/comments")
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("No article found by that ID");
-      });
-  });
-
-    test("status:404, responds with an error message when article does not exist", () => {
-      const newComment = {
-        username: "icellusedkars",
-        body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
-      };
-      return request(app)
-        .post("/api/articles/1234/comments")
-        .send(newComment)
-        .expect(404)
-        .then((res) => {
-          expect(res.body.msg).toBe("No article found by that ID");
-        });
-    });
-
-    test("status:400, responds with an error message when passed an object with invalid inputs", () => {
-      const newComment = {
-        username: 4567,
-        body: null,
-      };
-      return request(app)
-        .post("/api/articles/1/comments")
-        .expect(400)
-        .then((res) => {
-          expect(res.body.msg).toBe("Invalid input");
-        });
-    });
-
 });
 
+//describe("Error Handling", () => {
+  // test("status:400, responds with an error message when passed a bad ID", () => {
+  //   return request(app)
+  //     .get("/api/articles/abcd")
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Invalid input");
+  //     });
+  // });
+  // test("status:404, responds with an error message when passed an id that doesn't belong to an article", () => {
+  //   return request(app)
+  //     .get("/api/articles/11111111")
+  //     .expect(404)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("No article found by that ID");
+  //     });
+  // });
+  // it("status:400, responds with an error message when not passed an integer", () => {
+  //   const articleUpdate = { inc_votes: "hello" };
+  //   return request(app)
+  //     .patch("/api/articles/1")
+  //     .send(articleUpdate)
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Invalid input");
+  //     });
+  // });
+  // test("status:400, responds with an error message when passed a bad ID", () => {
+  //   return request(app)
+  //     .get("/api/articles/abcd/comments")
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Invalid input");
+  //     });
+  // });
 
+  // test("status:404, responds with an error message when article does not exist", () => {
+  //   return request(app)
+  //     .get("/api/articles/1234/comments")
+  //     .expect(404)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("No article found by that ID");
+  //     });
+  // });
+
+  // test("status:404, responds with an error message when comment is posted to an article that does not exist", () => {
+  //   const newComment = {
+  //     username: "icellusedkars",
+  //     body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
+  //   };
+  //   return request(app)
+  //     .post("/api/articles/1234/comments")
+  //     .send(newComment)
+  //     .expect(404)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("No article found by that ID");
+  //     });
+  // });
+
+  // test("status:400, responds with an error message when passed an object with invalid inputs", () => {
+  //   const newComment = {
+  //     username: 4567,
+  //     body: null,
+  //   };
+  //   return request(app)
+  //     .post("/api/articles/1/comments")
+  //     .expect(400)
+  //     .then((res) => {
+  //       expect(res.body.msg).toBe("Invalid input");
+  //     });
+  // });
+//});
 
 describe("PATCH /api/articles/:article_id", () => {
   it("status:200, responds with the updated article object with new votes added to the previous votes value", () => {
@@ -184,6 +191,16 @@ describe("PATCH /api/articles/:article_id", () => {
         });
       });
   });
+});
+it("status:400, responds with an error message when not passed an integer", () => {
+  const articleUpdate = { inc_votes: "hello" };
+  return request(app)
+    .patch("/api/articles/1")
+    .send(articleUpdate)
+    .expect(400)
+    .then((res) => {
+      expect(res.body.msg).toBe("Invalid input");
+    });
 });
 
 describe("GET /api/users", () => {
@@ -260,6 +277,24 @@ describe("GET /api/articles/:article_id/comments", () => {
         ]);
       });
   });
+
+  test("status:400, responds with an error message when passed a bad ID", () => {
+    return request(app)
+      .get("/api/articles/abcd/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("status:404, responds with an error message when article does not exist", () => {
+    return request(app)
+      .get("/api/articles/1234/comments")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("No article found by that ID");
+      });
+  });
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
@@ -283,6 +318,30 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
+    test("status:404, responds with an error message when comment is posted to an article that does not exist", () => {
+      const newComment = {
+        username: "icellusedkars",
+        body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
+      };
+      return request(app)
+        .post("/api/articles/1234/comments")
+        .send(newComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("No article found by that ID");
+        });
+    });
+      test("status:400, responds with an error message when passed an object with invalid inputs", () => {
+    const newComment = {
+      username: 4567,
+      body: null,
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid input");
+      });
+  });
 });
-
 
