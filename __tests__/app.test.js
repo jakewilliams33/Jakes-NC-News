@@ -105,15 +105,15 @@ describe("Error Handling", () => {
           expect(res.body.msg).toBe("Invalid input");
         });
     });
-    test("status:404, responds with an error message when passed an id that doesn't have any comments", () => {
-      return request(app)
-        .get("/api/articles/2/comments")
-        .expect(404)
-        .then((res) => {
-          expect(res.body.msg).toBe("No comments found for that article");
+
+        test("status:404, responds with an error message when passed a bad ID", () => {
+          return request(app)
+            .get("/api/articles/1234/comments")
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("No article found by that ID");
+            });
         });
-    });
-  
 });
 
 describe("PATCH /api/articles/:article_id", () => {
