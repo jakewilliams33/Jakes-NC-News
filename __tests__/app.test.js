@@ -70,7 +70,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-describe("GET Error Handling", () => {
+describe("Error Handling", () => {
   test("status:400, responds with an error message when passed a bad ID", () => {
     return request(app)
       .get("/api/articles/abcd")
@@ -97,6 +97,23 @@ describe("GET Error Handling", () => {
         expect(res.body.msg).toBe("Invalid input");
       });
   });
+    test("status:400, responds with an error message when passed a bad ID", () => {
+      return request(app)
+        .get("/api/articles/abcd/comments")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Invalid input");
+        });
+    });
+
+        test("status:404, responds with an error message when passed a bad ID", () => {
+          return request(app)
+            .get("/api/articles/1234/comments")
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("No article found by that ID");
+            });
+        });
 });
 
 describe("PATCH /api/articles/:article_id", () => {
@@ -179,10 +196,38 @@ describe("GET /api/articles", () => {
               body: expect.any(String),
               created_at: expect.any(String),
               votes: expect.any(Number),
-              comment_count: expect.any(String),
+              comment_count: expect.any(Number),
             })
           );
         });
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("Responds with an array of comments for the given article_id", () => {
+    return request(app)
+      .get("/api/articles/9/comments")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.comments).toEqual([
+      {
+        comment_id: 1,
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        article_id: 9,
+        author: 'butter_bridge',
+        votes: 16,
+        created_at: '2020-04-06T12:17:00.000Z'
+      },
+      {
+        comment_id: 17,
+        body: 'The owls are not what they seem.',
+        article_id: 9,
+        author: 'icellusedkars',
+        votes: 20,
+        created_at: '2020-03-14T17:02:00.000Z'
+      }
+    ]);
       });
   });
 });

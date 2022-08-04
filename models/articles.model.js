@@ -3,7 +3,7 @@ const db = require("../db/connection");
 exports.selectArticleById = (id) => {
   return db
     .query(
-      `SELECT articles.*, COUNT(comments.article_id) AS comment_count
+      `SELECT articles.*, COUNT(comments.article_id):: INT AS comment_count
         FROM comments
         LEFT JOIN articles ON comments.article_id = articles.article_id
         WHERE articles.article_id = $1
@@ -35,7 +35,7 @@ exports.updateArticleById = (id, newVotes) => {
 exports.selectArticles = () => {
   return db
     .query(
-      `SELECT articles.*, COUNT(comments.article_id) AS comment_count
+      `SELECT articles.*, COUNT(comments.article_id) :: INT AS comment_count
         FROM comments
         LEFT JOIN articles ON comments.article_id = articles.article_id
          GROUP BY articles.article_id
@@ -43,5 +43,31 @@ exports.selectArticles = () => {
     )
     .then(({ rows }) => {
       return rows;
+    });
+};
+
+exports.selectCommentsByArticleId = (id) => {
+  return db
+    .query(
+      `SELECT * FROM articles
+          WHERE article_id = $1;`,
+      [id]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No article found by that ID",
+        });
+      }
+      return db
+        .query(
+          `SELECT * FROM comments
+      WHERE article_id = $1;`,
+          [id]
+        )
+        .then(({ rows }) => {
+          return rows;
+        });
     });
 };
