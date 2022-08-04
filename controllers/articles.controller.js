@@ -29,7 +29,6 @@ exports.getCommentsByArticleId = (req, res, next) => {
   let id = req.params.article_id;
   selectCommentsByArticleId(id)
     .then((comments) => {
-      console.log(comments)
       res.status(200).send({ comments: comments });
     })
     .catch((err) => next(err));

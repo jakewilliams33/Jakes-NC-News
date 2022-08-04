@@ -161,7 +161,7 @@ describe("GET /api/users", () => {
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
-  test.only("Responds with an array of comments for the given article_id", () => {
+  test("Responds with an array of comments for the given article_id", () => {
     return request(app)
       .get("/api/articles/9/comments")
       .expect(200)
