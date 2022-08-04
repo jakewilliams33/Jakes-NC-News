@@ -70,7 +70,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-describe("GET Error Handling", () => {
+describe("Error Handling", () => {
   test("status:400, responds with an error message when passed a bad ID", () => {
     return request(app)
       .get("/api/articles/abcd")
@@ -97,6 +97,23 @@ describe("GET Error Handling", () => {
         expect(res.body.msg).toBe("Invalid input");
       });
   });
+    test("status:400, responds with an error message when passed a bad ID", () => {
+      return request(app)
+        .get("/api/articles/abcd/comments")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Invalid input");
+        });
+    });
+    test("status:404, responds with an error message when passed an id that doesn't have any comments", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("No comments found for that article");
+        });
+    });
+  
 });
 
 describe("PATCH /api/articles/:article_id", () => {
