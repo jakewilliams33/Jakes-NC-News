@@ -9,16 +9,13 @@ exports.selectArticleById = (id) => {
         WHERE articles.article_id = $1
          GROUP BY articles.article_id;`,
         [id]
-      )
-
-      .then(({ rows }) => {
+      ).then(({ rows }) => {
         if (rows.length === 0) {
           return Promise.reject({
             status: 404,
             msg: "No article found by that ID",
           });
         }
-
         return rows[0];
       })
   );
@@ -31,6 +28,26 @@ exports.updateArticleById = (id, newVotes) => {
       [newVotes, id]
     )
     .then(({ rows }) => {
+      return rows;
+    });
+};
+
+
+exports.selectCommentsByArticleId = (id) => {
+  return db
+    .query(
+      `SELECT * FROM comments
+        WHERE article_id = $1;`,
+      [id]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "No comments found with that article ID",
+        });
+      }
+      console.log(rows)
       return rows;
     });
 };
