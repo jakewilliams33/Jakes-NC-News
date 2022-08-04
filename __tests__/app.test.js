@@ -160,6 +160,33 @@ describe("GET /api/users", () => {
   });
 });
 
+describe("GET /api/articles", () => {
+  test("status:200, returns an array of article objects sorted descending by date", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+        res.body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+});
+
 describe("GET /api/articles/:article_id/comments", () => {
   test("Responds with an array of comments for the given article_id", () => {
     return request(app)
