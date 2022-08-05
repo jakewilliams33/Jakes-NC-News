@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { forEach } = require("../db/data/test-data/articles");
 const { checkExists } = require("../db/seeds/utils");
 
 exports.selectArticleById = (id) => {
@@ -36,7 +37,8 @@ exports.updateArticleById = (id, newVotes) => {
 exports.selectArticles = async (
   sort_by = "created_at",
   order = "DESC",
-  topic
+  topic,
+  queryArr
 ) => {
   const validSortBy = [
     "article_id",
@@ -50,7 +52,18 @@ exports.selectArticles = async (
   ];
   const validOrder = ["asc", "desc", "ASC", "DESC"];
   const queryValues = [];
+  const validQueries = ["sort_by", "order", "topic"];
+  let invalidEntry = false;
 
+  await queryArr.forEach((query) => {
+    if (!validQueries.includes(query)) {
+      invalidEntry = true;
+    }
+  });
+
+  if (invalidEntry) {
+    return Promise.reject({ status: 404, msg: "Not Found" });
+  }
   if (topic) {
     await checkExists("articles", "topic", topic);
   }
