@@ -31,8 +31,9 @@ exports.getArticles = (req, res, next) => {
   const { sort_by } = req.query;
   const { order } = req.query;
   const { topic } = req.query;
+  const queryArr = Object.keys(req.query);
 
-  selectArticles(sort_by, order, topic)
+  selectArticles(sort_by, order, topic, queryArr)
     .then((articles) => {
       res.send({ articles });
     })

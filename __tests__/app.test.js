@@ -398,4 +398,23 @@ describe("GET /api/articles (queries)", () => {
         expect(res.body.msg).toBe("Resource not found");
       });
   });
+  test("status:200, returns all articles sorted by date in a specified order", () => {
+    return request(app)
+      .get("/api/articles?order=ASC&sort_by=votes&topic=mitch")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("topic", {
+          ascending: true,
+        });
+        expect(articles.length).toBe(11);
+      });
+  });
+  test("status:404, responds with an error message when article does not exist", () => {
+    return request(app)
+      .get("/api/articles?jgdgv")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Not Found");
+      });
+  });
 });
