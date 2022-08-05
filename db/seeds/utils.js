@@ -29,7 +29,6 @@ exports.checkExists = async (table, column, value) => {
   const { rows }= await db.query(queryStr, [value]);
 
   if (rows.length === 0) {
-    console.log("hello");
     return Promise.reject({ status: 404, msg: "Resource not found" });
   }
 };

@@ -36,10 +36,7 @@ exports.getArticles = (req, res, next) => {
     .then((articles) => {
       res.send({ articles });
     })
-    .catch((err) => {
-      console.log(err);
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 exports.getCommentsByArticleId = (req, res, next) => {
