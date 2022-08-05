@@ -81,76 +81,76 @@ describe("GET /api/articles/:article_id", () => {
 });
 
 //describe("Error Handling", () => {
-  // test("status:400, responds with an error message when passed a bad ID", () => {
-  //   return request(app)
-  //     .get("/api/articles/abcd")
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Invalid input");
-  //     });
-  // });
-  // test("status:404, responds with an error message when passed an id that doesn't belong to an article", () => {
-  //   return request(app)
-  //     .get("/api/articles/11111111")
-  //     .expect(404)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("No article found by that ID");
-  //     });
-  // });
-  // it("status:400, responds with an error message when not passed an integer", () => {
-  //   const articleUpdate = { inc_votes: "hello" };
-  //   return request(app)
-  //     .patch("/api/articles/1")
-  //     .send(articleUpdate)
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Invalid input");
-  //     });
-  // });
-  // test("status:400, responds with an error message when passed a bad ID", () => {
-  //   return request(app)
-  //     .get("/api/articles/abcd/comments")
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Invalid input");
-  //     });
-  // });
+// test("status:400, responds with an error message when passed a bad ID", () => {
+//   return request(app)
+//     .get("/api/articles/abcd")
+//     .expect(400)
+//     .then((res) => {
+//       expect(res.body.msg).toBe("Invalid input");
+//     });
+// });
+// test("status:404, responds with an error message when passed an id that doesn't belong to an article", () => {
+//   return request(app)
+//     .get("/api/articles/11111111")
+//     .expect(404)
+//     .then((res) => {
+//       expect(res.body.msg).toBe("No article found by that ID");
+//     });
+// });
+// it("status:400, responds with an error message when not passed an integer", () => {
+//   const articleUpdate = { inc_votes: "hello" };
+//   return request(app)
+//     .patch("/api/articles/1")
+//     .send(articleUpdate)
+//     .expect(400)
+//     .then((res) => {
+//       expect(res.body.msg).toBe("Invalid input");
+//     });
+// });
+// test("status:400, responds with an error message when passed a bad ID", () => {
+//   return request(app)
+//     .get("/api/articles/abcd/comments")
+//     .expect(400)
+//     .then((res) => {
+//       expect(res.body.msg).toBe("Invalid input");
+//     });
+// });
 
-  // test("status:404, responds with an error message when article does not exist", () => {
-  //   return request(app)
-  //     .get("/api/articles/1234/comments")
-  //     .expect(404)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("No article found by that ID");
-  //     });
-  // });
+// test("status:404, responds with an error message when article does not exist", () => {
+//   return request(app)
+//     .get("/api/articles/1234/comments")
+//     .expect(404)
+//     .then((res) => {
+//       expect(res.body.msg).toBe("No article found by that ID");
+//     });
+// });
 
-  // test("status:404, responds with an error message when comment is posted to an article that does not exist", () => {
-  //   const newComment = {
-  //     username: "icellusedkars",
-  //     body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
-  //   };
-  //   return request(app)
-  //     .post("/api/articles/1234/comments")
-  //     .send(newComment)
-  //     .expect(404)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("No article found by that ID");
-  //     });
-  // });
+// test("status:404, responds with an error message when comment is posted to an article that does not exist", () => {
+//   const newComment = {
+//     username: "icellusedkars",
+//     body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
+//   };
+//   return request(app)
+//     .post("/api/articles/1234/comments")
+//     .send(newComment)
+//     .expect(404)
+//     .then((res) => {
+//       expect(res.body.msg).toBe("No article found by that ID");
+//     });
+// });
 
-  // test("status:400, responds with an error message when passed an object with invalid inputs", () => {
-  //   const newComment = {
-  //     username: 4567,
-  //     body: null,
-  //   };
-  //   return request(app)
-  //     .post("/api/articles/1/comments")
-  //     .expect(400)
-  //     .then((res) => {
-  //       expect(res.body.msg).toBe("Invalid input");
-  //     });
-  // });
+// test("status:400, responds with an error message when passed an object with invalid inputs", () => {
+//   const newComment = {
+//     username: 4567,
+//     body: null,
+//   };
+//   return request(app)
+//     .post("/api/articles/1/comments")
+//     .expect(400)
+//     .then((res) => {
+//       expect(res.body.msg).toBe("Invalid input");
+//     });
+// });
 //});
 
 describe("PATCH /api/articles/:article_id", () => {
@@ -292,7 +292,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/1234/comments")
       .expect(404)
       .then((res) => {
-        expect(res.body.msg).toBe("No article found by that ID");
+        expect(res.body.msg).toBe("Resource not found");
       });
   });
 });
@@ -318,20 +318,20 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
-    test("status:404, responds with an error message when comment is posted to an article that does not exist", () => {
-      const newComment = {
-        username: "icellusedkars",
-        body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
-      };
-      return request(app)
-        .post("/api/articles/1234/comments")
-        .send(newComment)
-        .expect(404)
-        .then((res) => {
-          expect(res.body.msg).toBe("No article found by that ID");
-        });
-    });
-      test("status:400, responds with an error message when passed an object with invalid inputs", () => {
+  test("status:404, responds with an error message when comment is posted to an article that does not exist", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "I have no idea where this will lead us, but I have a definite feeling it will be a place both wonderful and strange.",
+    };
+    return request(app)
+      .post("/api/articles/1234/comments")
+      .send(newComment)
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("No article found by that ID");
+      });
+  });
+  test("status:400, responds with an error message when passed an object with invalid inputs", () => {
     const newComment = {
       username: 4567,
       body: null,
@@ -345,3 +345,57 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("GET /api/articles (queries)", () => {
+  test("status:200, returns all articles sorted by a passed in parameter", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("title", {
+          descending: true,
+        });
+      });
+  });
+  test("status:200, returns all articles sorted by date in a specified order", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSortedBy("created_at", {
+          ascending: true,
+        });
+      });
+  });
+  test("status:200, returns articles, filtered by a specified topic", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles.length).toBe(11);
+      });
+  });
+  test("status:400, responds with and error when passed an invalid sort by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=titlegg")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad request");
+      });
+  });
+  test("status:400, responds with and error when passed an invalid order by query", () => {
+    return request(app)
+      .get("/api/articles?order=balls")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Bad request");
+      });
+  });
+  test("status:404, responds with an error message when article does not exist", () => {
+    return request(app)
+      .get("/api/articles?topic=nothing")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Resource not found");
+      });
+  });
+});

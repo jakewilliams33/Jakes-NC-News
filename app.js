@@ -22,6 +22,12 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.post("/api/articles/:article_id/comments", postCommentById);
 
+
+app.all("/*", (req, res) => {
+  res.status(404).send({ msg: "Not Found" });
+});
+
+
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Invalid input" });
@@ -36,9 +42,14 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.all("/*", (req, res) => {
-  res.status(404).send({ msg: "Not Found" });
-});
+app.use((err, req, res, next) => {
+  console.log(err)
+  res.status(500).send({msg: "Internal Server Error"})
+})
+
+
+
+
 
 // app.listen(9090, () => console.log("App listening on port 9090!"));
 

@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { checkExists } = require("../db/seeds/utils");
 
 exports.selectArticleById = (id) => {
   return db
@@ -32,43 +33,58 @@ exports.updateArticleById = (id, newVotes) => {
     });
 };
 
-exports.selectArticles = () => {
-  return db
-    .query(
-      `SELECT articles.*, COUNT(comments.article_id) :: INT AS comment_count
-        FROM comments
-        LEFT JOIN articles ON comments.article_id = articles.article_id
-         GROUP BY articles.article_id
-         ORDER BY created_at DESC;`
-    )
-    .then(({ rows }) => {
-      return rows;
-    });
+exports.selectArticles = async (
+  sort_by = "created_at",
+  order = "DESC",
+  topic
+) => {
+  const validSortBy = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+    "comment_count",
+  ];
+  const validOrder = ["asc", "desc", "ASC", "DESC"];
+  const queryValues = [];
+
+  if (topic) {
+    await checkExists("articles", "topic", topic);
+  }
+
+  if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
+  let queryStr = ``;
+  let queryStr1 = `SELECT articles.*, COUNT(comments.article_id) :: INT AS comment_count
+                     FROM articles
+                     LEFT JOIN comments ON comments.article_id = articles.article_id `;
+
+  let queryStr2 = ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`;
+
+  if (topic) {
+    queryValues.push(topic);
+    queryStr = queryStr1 + `WHERE topic = $1` + queryStr2;
+  }
+
+  return db.query(queryStr, queryValues).then(({ rows }) => {
+    return rows;
+  });
 };
 
 exports.selectCommentsByArticleId = (id) => {
   return db
     .query(
-      `SELECT * FROM articles
-          WHERE article_id = $1;`,
+      `SELECT * FROM comments
+      WHERE article_id = $1;`,
       [id]
     )
     .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: "No article found by that ID",
-        });
-      }
-      return db
-        .query(
-          `SELECT * FROM comments
-      WHERE article_id = $1;`,
-          [id]
-        )
-        .then(({ rows }) => {
-          return rows;
-        });
+      return rows;
     });
 };
 
