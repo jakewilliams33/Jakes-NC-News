@@ -54,9 +54,4 @@ app.use((err, req, res, next) => {
 })
 
 
-
-
-
-// app.listen(9090, () => console.log("App listening on port 9090!"));
-
 module.exports = app;
