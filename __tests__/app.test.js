@@ -348,8 +348,6 @@ describe("GET /api/articles (queries)", () => {
 
 describe("DELETE /api/comments/:comment_id", () => {
   test("status: 204, removes comment by comment id and returns no content", () => {
-    return request(app)
-      .delete("/api/comments/1")
-      .expect(204)
+    return request(app).delete("/api/comments/1").expect(204);
   });
 });
