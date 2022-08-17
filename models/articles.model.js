@@ -71,7 +71,6 @@ exports.selectArticles = async (
   if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
-
   let queryStr = ``;
   let queryStr1 = `SELECT articles.*, COUNT(comments.article_id) :: INT AS comment_count
                      FROM articles
@@ -82,9 +81,12 @@ exports.selectArticles = async (
   if (topic) {
     queryValues.push(topic);
     queryStr = queryStr1 + `WHERE topic = $1` + queryStr2;
+  } else {
+    queryStr = queryStr1 + queryStr2;
   }
 
   return db.query(queryStr, queryValues).then(({ rows }) => {
+    console.log(queryStr);
     return rows;
   });
 };
