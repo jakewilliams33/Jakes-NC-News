@@ -16,6 +16,7 @@ const {
 const { getUsers } = require("./controllers/users.controller");
 
 const { deleteCommentById } = require("./controllers/comments.controller");
+app.use(cors());
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
