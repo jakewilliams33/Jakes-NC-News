@@ -17,7 +17,7 @@ const { getUsers } = require("./controllers/users.controller");
 
 const { deleteCommentById } = require("./controllers/comments.controller");
 
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 app.get("/api", (req, res) => res.send(endpoints));
