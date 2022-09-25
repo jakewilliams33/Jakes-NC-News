@@ -1,4 +1,10 @@
-## NC News Backend repo
+## NC News Backend Project
+
+https://jakes-nc-news.netlify.app/
+
+# Information
+
+An API for a news blog, which allows the user to retrieve articles, post articles, post comments, vote etc through a PostgreSQL database.
 
 # Setup 
 
@@ -11,6 +17,10 @@ and another named '.env.test' with the text 'PGDATABASE=nc_news_test' inside.
 
 -Run 'npm install' and 'npm install express' to install all necessary packages.
 
--You have also been provided with a db folder with some data, a setup.sql file and a seeds folder. You should also take a minute to familiarise yourself with the npm scripts you have been provided.
+- To set up the database, use the script npm run setup-dbs to create both the test and dev databases. Use the script npm run seed to seed your database.
 
--The job of index.js in each the data folders is to export out all the data from that folder, currently stored in separate files. This is so that, when you need access to the data elsewhere, you can write one convenient require statement - to the index file, rather than having to require each file individually.
+- Minimum requred version of Node: v18.3.0
+
+- Minimum requred version of Postgres: 14.3
+
+
