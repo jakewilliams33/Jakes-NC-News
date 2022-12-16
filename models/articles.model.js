@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const { forEach } = require("../db/data/test-data/articles");
 const { checkExists } = require("../db/seeds/utils");
 
 exports.selectArticleById = (id) => {
@@ -86,7 +85,6 @@ exports.selectArticles = async (
   }
 
   return db.query(queryStr, queryValues).then(({ rows }) => {
-    console.log(queryStr);
     return rows;
   });
 };
